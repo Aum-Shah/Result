@@ -44,6 +44,10 @@
   .option:hover {
     background-color: #e0e0e0;
   }
+  .selected {
+    background-color: #007bff !important;
+    color: #fff !important;
+  }
   .navigation {
     display: flex;
     justify-content: space-between;
@@ -67,7 +71,7 @@
   </div>
   <div class="navigation">
     <button id="backBtn" onclick="previousQuestion()">Back</button>
-    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+    <button id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
   </div>
 </div>
 
@@ -173,39 +177,74 @@
     { question: "Q98", answer: "D" },
     { question: "Q99", answer: "B" },
     { question: "Q100", answer: "D" }
-]
-;
+];
 
   let currentQuestionIndex = 0;
   let totalScore = 0;
+  let selectedOption = null;
 
   function displayQuestion() {
     const questionContainer = document.getElementById("questionContainer");
     questionContainer.innerHTML = `
       <div class="question">${questions[currentQuestionIndex].question}</div>
       <div class="options">
-        <div class="option" onclick="checkAnswer('A')">A</div>
-        <div class="option" onclick="checkAnswer('B')">B</div>
-        <div class="option" onclick="checkAnswer('C')">C</div>
-        <div class="option" onclick="checkAnswer('D')">D</div>
-        <div class="option" onclick="checkAnswer('Not Answered')">Not Answered</div>
+        <div class="option" onclick="selectOption(this, 'A')">A</div>
+        <div class="option" onclick="selectOption(this, 'B')">B</div>
+        <div class="option" onclick="selectOption(this, 'C')">C</div>
+        <div class="option" onclick="selectOption(this, 'D')">D</div>
+        <div class="option" onclick="selectOption(this, 'Not Answered')">Not Answered</div>
       </div>
     `;
+    
+    if (selectedOption) {
+      const optionElements = document.querySelectorAll('.option');
+      optionElements.forEach(option => {
+        if (option.innerText === selectedOption) {
+          option.classList.add('selected');
+        }
+      });
+    }
   }
 
-  function checkAnswer(selectedOption) {
-    const correctAnswer = questions[currentQuestionIndex].answer;
-    if (selectedOption === correctAnswer) {
-      totalScore += 2;
-    } else if (selectedOption !== 'Not Answered') {
-      totalScore -= 0.5;
-    }
+  function selectOption(option, optionValue) {
+    const optionElements = document.querySelectorAll('.option');
+    optionElements.forEach(option => option.classList.remove('selected'));
+    option.classList.add('selected');
+    selectedOption = optionValue;
+    document.getElementById("nextBtn").disabled = false;
+  }
 
-    if (currentQuestionIndex < questions.length - 1) {
-      currentQuestionIndex++;
+const userSelections = [];
+
+function checkAnswer() {
+  const correctAnswer = questions[currentQuestionIndex].answer;
+  const userAnswer = selectedOption || 'Not Answered'; // Get user's answer or mark it as 'Not Answered'
+  userSelections[currentQuestionIndex] = userAnswer; // Store user's answer for the current question
+
+  if (userAnswer === correctAnswer) {
+    totalScore += 2;
+  } else if (userAnswer !== 'Not Answered') {
+    totalScore -= 0.5;
+  }
+}
+
+  function nextQuestion() {
+    checkAnswer();
+    currentQuestionIndex++;
+    selectedOption = null;
+    document.getElementById("nextBtn").disabled = true;
+    if (currentQuestionIndex < questions.length) {
       displayQuestion();
     } else {
       displayResult();
+    }
+  }
+
+  function previousQuestion() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      selectedOption = null;
+      displayQuestion();
     }
   }
 
@@ -217,20 +256,6 @@
     `;
     document.getElementById("nextBtn").style.display = "none";
     document.getElementById("backBtn").style.display = "none";
-  }
-
-  function nextQuestion() {
-    currentQuestionIndex++;
-    displayQuestion();
-    document.getElementById("nextBtn").style.display = "inline-block";
-    document.getElementById("backBtn").style.display = "inline-block";
-  }
-
-  function previousQuestion() {
-    if (currentQuestionIndex > 0) {
-      currentQuestionIndex--;
-      displayQuestion();
-    }
   }
 
   // Display the first question when the page loads
