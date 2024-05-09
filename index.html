@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .question {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .option {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .option:hover {
+    background-color: #e0e0e0;
+  }
+  #nextBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="questionContainer">
+    <!-- Questions will be inserted here -->
+  </div>
+  <button id="nextBtn" onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+ const questions = [
+    { question: "Q1", answer: "C" },
+    { question: "Q2", answer: "B" },
+    { question: "Q3", answer: "C" },
+    { question: "Q4", answer: "D" },
+    { question: "Q5", answer: "A" },
+    { question: "Q6", answer: "B" },
+    { question: "Q7", answer: "B" },
+    { question: "Q8", answer: "B" },
+    { question: "Q9", answer: "C" },
+    { question: "Q10", answer: "A" },
+    { question: "Q11", answer: "B" },
+    { question: "Q12", answer: "A" },
+    { question: "Q13", answer: "B" },
+    { question: "Q14", answer: "A" },
+    { question: "Q15", answer: "D" },
+    { question: "Q16", answer: "D" },
+    { question: "Q17", answer: "B" },
+    { question: "Q18", answer: "C" },
+    { question: "Q19", answer: "B" },
+    { question: "Q20", answer: "C" },
+    { question: "Q21", answer: "C" },
+    { question: "Q22", answer: "D" },
+    { question: "Q23", answer: "B" },
+    { question: "Q24", answer: "D" },
+    { question: "Q25", answer: "A" },
+    { question: "Q26", answer: "A" },
+    { question: "Q27", answer: "C" },
+    { question: "Q28", answer: "B" },
+    { question: "Q29", answer: "C" },
+    { question: "Q30", answer: "C" },
+    { question: "Q31", answer: "D" },
+    { question: "Q32", answer: "A" },
+    { question: "Q33", answer: "B" },
+    { question: "Q34", answer: "D" },
+    { question: "Q35", answer: "D" },
+    { question: "Q36", answer: "C" },
+    { question: "Q37", answer: "D" },
+    { question: "Q38", answer: "C" },
+    { question: "Q39", answer: "D" },
+    { question: "Q40", answer: "C" },
+    { question: "Q41", answer: "D" },
+    { question: "Q42", answer: "B" },
+    { question: "Q43", answer: "A" },
+    { question: "Q44", answer: "B" },
+    { question: "Q45", answer: "A" },
+    { question: "Q46", answer: "B" },
+    { question: "Q47", answer: "D" },
+    { question: "Q48", answer: "C" },
+    { question: "Q49", answer: "A" },
+    { question: "Q50", answer: "B" },
+    { question: "Q51", answer: "D" },
+    { question: "Q52", answer: "B" },
+    { question: "Q53", answer: "A" },
+    { question: "Q54", answer: "B" },
+    { question: "Q55", answer: "D" },
+    { question: "Q56", answer: "A" },
+    { question: "Q57", answer: "A" },
+    { question: "Q58", answer: "C" },
+    { question: "Q59", answer: "B" },
+    { question: "Q60", answer: "D" },
+    { question: "Q61", answer: "A" },
+    { question: "Q62", answer: "C" },
+    { question: "Q63", answer: "D" },
+    { question: "Q64", answer: "B" },
+    { question: "Q65", answer: "B" },
+    { question: "Q66", answer: "D" },
+    { question: "Q67", answer: "A" },
+    { question: "Q68", answer: "D" },
+    { question: "Q69", answer: "A" },
+    { question: "Q70", answer: "C" },
+    { question: "Q71", answer: "D" },
+    { question: "Q72", answer: "B" },
+    { question: "Q73", answer: "A" },
+    { question: "Q74", answer: "D" },
+    { question: "Q75", answer: "C" },
+    { question: "Q76", answer: "A" },
+    { question: "Q77", answer: "A" },
+    { question: "Q78", answer: "B" },
+    { question: "Q79", answer: "C" },
+    { question: "Q80", answer: "A" },
+    { question: "Q81", answer: "B" },
+    { question: "Q82", answer: "B" },
+    { question: "Q83", answer: "B" },
+    { question: "Q84", answer: "A" },
+    { question: "Q85", answer: "B" },
+    { question: "Q86", answer: "B" },
+    { question: "Q87", answer: "B" },
+    { question: "Q88", answer: "D" },
+    { question: "Q89", answer: "A" },
+    { question: "Q90", answer: "C" },
+    { question: "Q91", answer: "B" },
+    { question: "Q92", answer: "C" },
+    { question: "Q93", answer: "B" },
+    { question: "Q94", answer: "A" },
+    { question: "Q95", answer: "C" },
+    { question: "Q96", answer: "A" },
+    { question: "Q97", answer: "B" },
+    { question: "Q98", answer: "D" },
+    { question: "Q99", answer: "B" },
+    { question: "Q100", answer: "D" }
+]
+
+  let currentQuestionIndex = 0;
+  let totalScore = 0;
+
+  function displayQuestion() {
+    const questionContainer = document.getElementById("questionContainer");
+    questionContainer.innerHTML = `
+      <div class="question">${questions[currentQuestionIndex].question}</div>
+      <div class="options">
+        <div class="option" onclick="checkAnswer('A')">A</div>
+        <div class="option" onclick="checkAnswer('B')">B</div>
+        <div class="option" onclick="checkAnswer('C')">C</div>
+        <div class="option" onclick="checkAnswer('D')">D</div>
+        <div class="option" onclick="checkAnswer('Not Answered')">Not Answered</div>
+      </div>
+    `;
+  }
+
+  function checkAnswer(selectedOption) {
+    const correctAnswer = questions[currentQuestionIndex].answer;
+    if (selectedOption === correctAnswer) {
+      totalScore += 2;
+    } else if (selectedOption !== 'Not Answered') {
+      totalScore -= 0.5;
+    }
+
+    if (currentQuestionIndex < questions.length - 1) {
+      currentQuestionIndex++;
+      displayQuestion();
+    } else {
+      displayResult();
+    }
+  }
+
+  function displayResult() {
+    const questionContainer = document.getElementById("questionContainer");
+    questionContainer.innerHTML = `
+      <div class="question">Quiz Completed!</div>
+      <div class="question">Your Total Score: ${totalScore}</div>
+    `;
+    document.getElementById("nextBtn").style.display = "none";
+  }
+
+  function nextQuestion() {
+    currentQuestionIndex++;
+    displayQuestion();
+    document.getElementById("nextBtn").style.display = "none";
+  }
+
+  // Display the first question when the page loads
+  displayQuestion();
+</script>
+</body>
+</html>
