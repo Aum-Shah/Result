@@ -18,6 +18,7 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
   }
   .question {
     font-size: 18px;
@@ -38,16 +39,22 @@
   .option:hover {
     background-color: #e0e0e0;
   }
-  #nextBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+  #nextBtn,
+  #backBtn {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+  }
+  #nextBtn {
+    right: 20px;
+  }
+  #backBtn {
+    left: 20px;
   }
 </style>
 </head>
@@ -56,11 +63,12 @@
   <div id="questionContainer">
     <!-- Questions will be inserted here -->
   </div>
+  <button id="backBtn" onclick="previousQuestion()">Back</button>
   <button id="nextBtn" onclick="nextQuestion()">Next</button>
 </div>
 
 <script>
- const questions = [
+  const questions = [
     { question: "Q1", answer: "C" },
     { question: "Q2", answer: "B" },
     { question: "Q3", answer: "C" },
@@ -161,7 +169,7 @@
     { question: "Q98", answer: "D" },
     { question: "Q99", answer: "B" },
     { question: "Q100", answer: "D" }
-]
+];
 
   let currentQuestionIndex = 0;
   let totalScore = 0;
@@ -203,12 +211,21 @@
       <div class="question">Your Total Score: ${totalScore}</div>
     `;
     document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("backBtn").style.display = "none";
   }
 
   function nextQuestion() {
     currentQuestionIndex++;
     displayQuestion();
-    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("nextBtn").style.display = "inline-block";
+    document.getElementById("backBtn").style.display = "inline-block";
+  }
+
+  function previousQuestion() {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      displayQuestion();
+    }
   }
 
   // Display the first question when the page loads
